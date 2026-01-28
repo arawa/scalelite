@@ -59,7 +59,7 @@ namespace :tenantSettings do
     end
 
     if setting.destroy!
-      puts("OK")
+      # Should there be a puts("OK") here?
       Rails.logger.info('TenantSetting was successfully deleted.')
     else
       warn('Error! TenantSetting has not been deleted')
