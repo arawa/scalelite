@@ -87,7 +87,7 @@ namespace :meetings do
   desc('Get meeting details running in BigBlueButton servers')
   task :info, [:meeting_id] => :environment do |_t, args|
     if args.meeting_id.nil?
-      puts('Error: Please input a meetingID!')
+      warn('Error: Please input a meetingID!')
       exit(1)
     end
     include ApiHelper
