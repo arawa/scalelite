@@ -213,6 +213,7 @@ namespace :servers do
     end
   rescue StandardError => e
     warn(e)
+    # Should there be an exit(1) here?
   end
 
   desc 'Sync cluster state with servers defined in a YAML file'

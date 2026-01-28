@@ -63,7 +63,7 @@ namespace :tenantSettings do
       Rails.logger.info('TenantSetting was successfully deleted.')
     else
       warn('Error! TenantSetting has not been deleted')
-      exit(1)
+      # Should there be an exit(1) here?
     end
   end
 end
