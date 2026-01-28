@@ -94,7 +94,7 @@ namespace :meetings do
 
     meeting_id = args.meeting_id
     meeting = Meeting.find(meeting_id)
-    puts('No meeting info to show') if meeting.nil?
+    warn('No meeting info to show') if meeting.nil?
     meeting_server = meeting.server
     response = get_post_req(encode_bbb_uri('getMeetingInfo', meeting_server.url,
                                            meeting_server.secret, meetingID: meeting.id))
