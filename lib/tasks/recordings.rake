@@ -58,7 +58,7 @@ namespace :recordings do
       begin
         Metadatum.create!(recording_id: rec.id, key: 'tenant-id', value: tenant_id)
       rescue ActiveRecord::RecordInvalid => e
-        puts("Error creating metadatum record for recording with id #{rec.id}: #{e}")
+        warn("Error creating metadatum record for recording with id #{rec.id}: #{e}")
       end
     end
 
