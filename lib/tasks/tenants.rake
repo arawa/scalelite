@@ -136,7 +136,7 @@ namespace :tenants do
 
     if tenant.destroy!
       # Should there be a puts("OK") here?
-      Rails.logger.info('Tenant was successfully deleted.')
+      puts('Tenant was successfully deleted.')
     else
       warn('Error! Tenant has not been deleted')
       # Should there be an exit(1) here?
