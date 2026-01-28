@@ -22,7 +22,7 @@ task tenantSettings: :environment do
         Rails.logger.info("\toverride: #{setting.override}")
       end
     else
-      STDERR.puts('  No custom settings are configured')
+      warn('  No custom settings are configured')
     end
   end
 end
@@ -37,7 +37,7 @@ namespace :tenantSettings do
     override = args[:override]
 
     unless tenant_id.present? && param.present? && value.present? && override.present?
-      STDERR.puts('Error: tenant_id, param, value and override are required to create a TenantSetting')
+      warn('Error: tenant_id, param, value and override are required to create a TenantSetting')
       exit(1)
     end
 
@@ -54,7 +54,7 @@ namespace :tenantSettings do
 
     setting = TenantSetting.find(id)
     if setting.blank?
-      STDERR.puts("TenantSetting with id #{id} does not exist in the system. Exiting...")
+      warn("TenantSetting with id #{id} does not exist in the system. Exiting...")
       exit(1)
     end
 
@@ -62,7 +62,7 @@ namespace :tenantSettings do
       puts("OK")
       Rails.logger.info('TenantSetting was successfully deleted.')
     else
-      STDERR.puts('Error! TenantSetting has not been deleted')
+      warn('Error! TenantSetting has not been deleted')
       exit(1)
     end
   end

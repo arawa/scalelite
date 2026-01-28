@@ -36,7 +36,7 @@ namespace :tenants do
     secrets = args[:secrets]
 
     unless name.present? && secrets.present?
-      STDERR.puts('Error: both name and secrets are required to create a Tenant')
+      warn('Error: both name and secrets are required to create a Tenant')
       exit(1)
     end
 
@@ -54,7 +54,7 @@ namespace :tenants do
     secrets = args[:secrets]
 
     if id.blank? || !(name.present? || secrets.present?)
-      STDERR.puts('Error: id and either name or secrets are required to update a Tenant')
+      warn('Error: id and either name or secrets are required to update a Tenant')
       exit(1)
     end
 
@@ -77,7 +77,7 @@ namespace :tenants do
     lrs_password = args[:lrs_password]
 
     if id.blank? || lrs_endpoint.blank? || lrs_username.blank? || lrs_password.blank?
-      STDERR.puts('Error: id, LRS_ENDPOINT, LRS_USERNAME, LRS_PASSWORD are required to update a Tenant')
+      warn('Error: id, LRS_ENDPOINT, LRS_USERNAME, LRS_PASSWORD are required to update a Tenant')
       exit(1)
     end
 
@@ -105,7 +105,7 @@ namespace :tenants do
 
     if id.blank? || lrs_endpoint.blank? || kc_token_url.blank? || kc_client_id.blank? ||
        kc_client_secret.blank? || kc_username.blank? || kc_password.blank?
-      STDERR.puts('Error: LRS_ENDPOINT, KC_TOKEN_URL, KC_CLIENT_ID, KC_CLIENT_SECRET, KC_USERNAME, KC_PASSWORD are required to update a Tenant')
+      warn('Error: LRS_ENDPOINT, KC_TOKEN_URL, KC_CLIENT_ID, KC_CLIENT_SECRET, KC_USERNAME, KC_PASSWORD are required to update a Tenant')
       exit(1)
     end
 
@@ -130,7 +130,7 @@ namespace :tenants do
 
     tenant = Tenant.find(id)
     if tenant.blank?
-      STDERR.puts("Tenant with id #{id} does not exist in the system. Exiting...")
+      warn("Tenant with id #{id} does not exist in the system. Exiting...")
       exit(1)
     end
 
@@ -138,7 +138,7 @@ namespace :tenants do
       puts("OK")
       Rails.logger.info('Tenant was successfully deleted.')
     else
-      STDERR.puts('Error! Tenant has not been deleted')
+      warn('Error! Tenant has not been deleted')
       exit(1)
     end
   end

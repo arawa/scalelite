@@ -57,7 +57,7 @@ namespace :meetings do
                  else
                    Meeting.all
                  end
-      STDERR.puts('No meetings to clear') if meetings.empty?
+      warn('No meetings to clear') if meetings.empty?
       pool = Concurrent::FixedThreadPool.new(Rails.configuration.x.poller_threads.to_i - 1, name: 'end-meeting')
       tasks = meetings.map do |meeting|
         Concurrent::Promises.future_on(pool) do

@@ -3,7 +3,7 @@
 desc('List configured BigBlueButton servers')
 task servers: :environment do
   servers = Server.all
-  STDERR.puts('No servers are configured') if servers.empty?
+  warn('No servers are configured') if servers.empty?
   servers.each do |server|
     puts("id: #{server.id}")
     puts("\turl: #{server.url}")
@@ -25,12 +25,12 @@ namespace :servers do
   desc 'Add a new BigBlueButton server (it will be added disabled)'
   task :add, [:url, :secret, :load_multiplier, :tag] => :environment do |_t, args|
     if args.url.nil? || args.secret.nil?
-      STDERR.puts('Error: Please input at least a URL and a secret!')
+      warn('Error: Please input at least a URL and a secret!')
       exit(1)
     end
 
     unless args.url.start_with?('http://', 'https://')
-      STDERR.puts('Error: Server URL must start with http:// or https://')
+      warn('Error: Server URL must start with http:// or https://')
       exit(1)
     end
 
@@ -67,7 +67,7 @@ namespace :servers do
     server.save!
     puts('OK')
   rescue ApplicationRedisRecord::RecordNotFound
-    STDERR.puts("ERROR: No server found with id: #{args.id}")
+    warn("ERROR: No server found with id: #{args.id}")
     exit(1)
   end
 
@@ -78,7 +78,7 @@ namespace :servers do
     server.destroy!
     puts('OK')
   rescue ApplicationRedisRecord::RecordNotFound
-    STDERR.puts("ERROR: No server found with id: #{args.id}")
+    warn("ERROR: No server found with id: #{args.id}")
     exit(1)
   end
 
@@ -90,7 +90,7 @@ namespace :servers do
     server.save!
     puts('OK')
   rescue ApplicationRedisRecord::RecordNotFound
-    STDERR.puts("ERROR: No server found with id: #{args.id}")
+    warn("ERROR: No server found with id: #{args.id}")
     exit(1)
   end
 
@@ -103,10 +103,10 @@ namespace :servers do
     server.save!
     puts('OK')
   rescue ApplicationRedisRecord::RecordNotFound
-    STDERR.puts("ERROR: No server found with id: #{args.id}")
+    warn("ERROR: No server found with id: #{args.id}")
     exit(1)
   rescue StandardError => e
-    STDERR.puts("ERROR: Failed to cordon server #{args.id} - #{e}")
+    warn("ERROR: Failed to cordon server #{args.id} - #{e}")
     exit(1)
   end
 
@@ -117,7 +117,7 @@ namespace :servers do
     server = Server.find(args.id)
     response = true
     if server.load.to_f > 0.0
-      STDERR.puts("WARNING: You are trying to disable a server with active load. You should use the cordon option if
+      warn("WARNING: You are trying to disable a server with active load. You should use the cordon option if
           you do not want to clear all the meetings")
       puts('If you still wish to continue please enter `yes`')
       response = $stdin.gets.chomp.casecmp('yes').zero?
@@ -131,7 +131,7 @@ namespace :servers do
         rescue ApplicationRedisRecord::RecordNotDestroyed => e
           raise("ERROR: Could not destroy meeting id=#{meeting.id}: #{e}")
         rescue StandardError => e
-          STDERR.puts("WARNING: Could not end meeting id=#{meeting.id}: #{e}")
+          warn("WARNING: Could not end meeting id=#{meeting.id}: #{e}")
         end
       end
     end
@@ -139,7 +139,7 @@ namespace :servers do
     server.save!
     puts('OK')
   rescue ApplicationRedisRecord::RecordNotFound
-    STDERR.puts("ERROR: No server found with id: #{args.id}")
+    warn("ERROR: No server found with id: #{args.id}")
     exit(1)
   end
 
@@ -160,16 +160,16 @@ namespace :servers do
     rescue ApplicationRedisRecord::RecordNotDestroyed => e
       raise("ERROR: Could not destroy meeting id=#{meeting.id}: #{e}")
     rescue StandardError => e
-      STDERR.puts("WARNING: Could not end meeting id=#{meeting.id}: #{e}")
+      warn("WARNING: Could not end meeting id=#{meeting.id}: #{e}")
     end
     server.state = 'disabled' unless args.keep_state
     server.save!
     puts('OK')
   rescue ApplicationRedisRecord::RecordNotFound
-    STDERR.puts("ERROR: No server found with id: #{args.id}")
+    warn("ERROR: No server found with id: #{args.id}")
     exit(1)
   rescue StandardError => e
-    STDERR.puts("ERROR: Failed to panic server #{args.id} - #{e}")
+    warn("ERROR: Failed to panic server #{args.id} - #{e}")
     exit(1)
   end
 
@@ -188,7 +188,7 @@ namespace :servers do
     server.save!
     puts('OK')
   rescue ApplicationRedisRecord::RecordNotFound
-    STDERR.puts("ERROR: No server found with id: #{args.id}")
+    warn("ERROR: No server found with id: #{args.id}")
     exit(1)
   end
 
@@ -199,7 +199,7 @@ namespace :servers do
     server.save!
     puts('OK')
   rescue ApplicationRedisRecord::RecordNotFound
-    STDERR.puts("ERROR: No server found with id: #{args.id}")
+    warn("ERROR: No server found with id: #{args.id}")
     exit(1)
   end
 
@@ -212,7 +212,7 @@ namespace :servers do
       puts("id: #{created.id}")
     end
   rescue StandardError => e
-    STDERR.puts(e)
+    warn(e)
   end
 
   desc 'Sync cluster state with servers defined in a YAML file'
@@ -222,7 +222,7 @@ namespace :servers do
 
     ServerSync.sync_file(args.path, args.mode, args.dryrun)
   rescue StandardError => e
-    STDERR.puts("ERROR: #{e}")
+    warn("ERROR: #{e}")
     exit(1)
   end
 
@@ -251,11 +251,11 @@ namespace :servers do
         meetings = resp.xpath('/response/meetings/meeting')
         meeting_ids = meetings.map { |meeting| meeting.xpath('.//meetingName').text }
         puts("MeetingIDs: \n\t#{meeting_ids.join("\n\t")}")
-        STDERR.puts("\tNo meetings to display") if meeting_ids.empty?
+        warn("\tNo meetings to display") if meeting_ids.empty?
       rescue BBBErrors::BBBError => e
-        STDERR.puts("\nFailed to get server id=#{server.id} status: #{e}")
+        warn("\nFailed to get server id=#{server.id} status: #{e}")
       rescue StandardError => e
-        STDERR.puts("\nFailed to get meetings list status: #{e}")
+        warn("\nFailed to get meetings list status: #{e}")
       end
     end
     begin

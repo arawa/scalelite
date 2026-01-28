@@ -49,7 +49,7 @@ namespace :recordings do
   task :addToTenant, [:tenant_id] => :environment do |_t, args|
     tenant_id = args[:tenant_id]
     unless tenant_id
-      STDERR.puts('No tenant ID was provided')
+      warn('No tenant ID was provided')
       exit(1)
     end
 
