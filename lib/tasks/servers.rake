@@ -117,7 +117,7 @@ namespace :servers do
     server = Server.find(args.id)
     response = true
     if server.load.to_f > 0.0
-      warn("WARNING: You are trying to disable a server with active load. You should use the cordon option if
+      puts("WARNING: You are trying to disable a server with active load. You should use the cordon option if
           you do not want to clear all the meetings")
       puts('If you still wish to continue please enter `yes`')
       response = $stdin.gets.chomp.casecmp('yes').zero?
