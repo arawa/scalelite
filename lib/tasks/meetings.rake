@@ -120,6 +120,6 @@ namespace :meetings do
     puts("\t\tbbb-recording-description: #{metadata.xpath('.//bbb-recording-description').text}")
     puts("\t\tbbb-origin-tag: #{metadata.xpath('.//bbb-origin-tag').text}")
   rescue StandardError => e
-    puts("WARNING: Could not get info for meeting id=#{meeting.id}: #{e}")
+    warn("WARNING: Could not get info for meeting id=#{meeting.id}: #{e}")
   end
 end
